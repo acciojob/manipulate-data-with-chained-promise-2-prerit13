@@ -1,1 +1,45 @@
 //your JS code here. If required.
+
+  <script type="text/javascript" src="./script.js">
+     function manipulateData() {
+            // Step 1: Create the initial promise that resolves after 3 seconds
+            let initialPromise = new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve([1, 2, 3, 4]); // Resolves with the initial array
+                },3000); // 3 seconds delay
+            });
+
+            // Step 2: After the initial promise resolves, filter even numbers
+            initialPromise
+                .then((array) => {
+                    const evenNumbers = array.filter(num => num % 2 === 0); // Keep only even numbers
+                    
+                    // Return a new promise that resolves after 1 second
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            document.getElementById('output').textContent = evenNumbers.join(','); // Display [2, 4]
+                            resolve(evenNumbers); // Pass this array to the next step
+                        }, 1000); // 1 second delay
+                    });
+                })
+                // Step 3: Multiply each even number by 2
+                .then((evenNumbers) => {
+                    const multipliedNumbers = evenNumbers.map(num => num * 2); // Multiply by 2
+                    
+                    // Return another promise that resolves after 2 seconds
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            document.getElementById('output').textContent = multipliedNumbers.join(','); // Display [4, 8]
+                            resolve(); // Final step, no further data needed
+                        }, 2000); // 2 seconds delay
+                    });
+                })
+                .catch((error) => {
+                    // Handle any unexpected errors
+                    console.error("An error occurred:", error);
+                });
+        }
+
+        // Start the process when the page is loaded
+        window.onload = manipulateData;
+    </script>
